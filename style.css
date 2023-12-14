@@ -1,0 +1,21 @@
+/* styles.css */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td input[type="checkbox"] {
+    transform: scale(1.5);
+    /* Increase checkbox size */
+}

@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Data Extension",
+  "version": "1.0",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+      "*://*.whatsapp.com/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["wppconnect-wa.js","msgsend.js"],
+      "matches": ["https://web.whatsapp.com/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://127.0.0.1:5500/website.html"],
+      "js": ["contentScriptA.js"]
+    },
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["contentScriptB.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
