@@ -4,6 +4,7 @@ chrome.runtime.sendMessage({ getAction: "getData" }, function (response) {
     if (response && response.backgroundData) {
         // Assuming you want to display the data in an element with id "dataContainer"
         console.log(response.backgroundData);
+        localStorage.setItem('data', JSON.stringify(response.backgroundData));
         const dataContainer = document.getElementById('dataContainer');
         if (dataContainer) {
             dataContainer.innerText = response.backgroundData;
@@ -43,9 +44,11 @@ async function exampleUsage() {
         console.error('Element not found:', error);
     }
 }
+// console.log(localStorage.getItem('AcknowledgementData'));
+// Set data in local storage
 
+// Clear all data from local storage
 // Call the function
-
 
 
 // Function to simulate key press
@@ -88,3 +91,8 @@ window.addEventListener('load', () => {
 // WPP.webpack.onReady(function () {
 //     console.log('Ready to use WPPConnect WA-JS');
 // });
+setInterval(() => {
+    if (localStorage.getItem('GetRecord')) {
+        chrome.runtime.sendMessage({ action: 'setAckObj', ackObject: localStorage.getItem('AcknowledgementData') });
+    }
+}, 1000);
