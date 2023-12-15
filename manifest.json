@@ -3,6 +3,7 @@
   "name": "Data Extension",
   "version": "1.0",
   "permissions": [
+    "scripting",
     "activeTab",
     "storage",
     "unlimitedStorage"
@@ -12,7 +13,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["wppconnect-wa.js","msgsend.js"],
+      "resources": ["wppconnect-wa.js", "msgsend.js"],
       "matches": ["https://web.whatsapp.com/*"]
     }
   ],

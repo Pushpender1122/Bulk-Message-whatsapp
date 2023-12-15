@@ -5,19 +5,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .container {
+            display: flex;
+            border: 1px solid;
+        }
+
+        .rightside {
+            border: 1px solid;
+        }
+
+        .leftside {
+            display: flex;
+
+        }
+
+        .leftsidediv {
+            padding: 0 20px;
+            border-left: 1px solid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Align data items at the center */
+        }
+
+        .rightside>p {
+            /* border: 2px solid; */
+            width: 130px;
+            margin-bottom: 10px;
+            /* Adjust margin for spacing between paragraphs */
+        }
+    </style>
 </head>
 
 <body>
-    <Button onclick="a()">Send
-        msg</Button>
+    <Button onclick="a()">Send msg</Button>
 
+    <div class="container">
+        <div class="rightside">
+            <p>Hi there, Welcome to the message sender</p>
+            <span>Start at 20/21/01</span>
+        </div>
+        <div class="leftside">
+            <div class="leftsidediv">
+                <div>Pending</div>
+                <p>0</p>
+            </div>
+            <div class="leftsidediv">
+                <div>Sent</div>
+                <p id="send">0</p>
+            </div>
+            <div class="leftsidediv">
+                <div>Failed</div>
+                <p id="failed">0</p>
+            </div>
+        </div>
+
+    </div>
     <script>
         function a() {
-            localStorage.setItem('some', 'somejhnk')
-            handle(['9467592957', '9671099771'], 'Hello');
+            // localStorage.setItem('some', 'somejhnk')
+            // handle(['9467592957', '9671099771'], 'Hello');
+            handle();
         }
     </script>
 </body>
-
 
 </html>

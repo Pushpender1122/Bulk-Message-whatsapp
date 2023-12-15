@@ -26,4 +26,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         });
         return true; // Indicates asynchronous response
     }
+    if (message.action === 'setTime') {
+        const timeToSet = message.time;
+
+        // Store the received time in chrome.storage.local
+        chrome.storage.local.set({ 'startingTime': timeToSet }, function () {
+            console.log("Time set in storage: " + timeToSet);
+            sendResponse({ success: true }); // Respond back indicating success
+        });
+        return true; // Indicates asynchronous response
+    } else if (message.action === 'getTime') {
+        chrome.storage.local.get('startingTime', function (data) {
+            const startedTime = data.startingTime || "N/A"; // Set default if undefined
+            sendResponse({ 'startedTime': startedTime });
+        });
+        return true; // Indicates asynchronous response
+    }
 });

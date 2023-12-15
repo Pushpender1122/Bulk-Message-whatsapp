@@ -20,22 +20,25 @@ function waitForElementById(elementId, interval = 1000) {
 }
 //Send message and receiving acknowledgement
 async function msgsnedfun(number, message) {
-    Acknowledgement.succeed += 1;
-    // var ack = await WPP.chat.sendTextMessage(number, message);
-    // ack.sendMsgResult
-    //     .then((result) => {
-    //         console.log('Resolved sendMsgResult:', result);
-    //         if (result.messageSendResult === 'OK') {
-    //             Acknowledgement.succeed += 1;
-    //         }
-    //     })
-    //     .catch((error) => {
-    //         console.error('Error in sendMsgResult promise:', error);
-    //         Acknowledgement.failed += 1;
-    //         // Handle errors if the promise fails to resolve
-    //     });
-    // // console.log(ack);
-    // console.log(Acknowledgement);
+    try {
+        const ack = await WPP.chat.sendTextMessage(number, message, { createChat: true });
+        const result = await ack.sendMsgResult;
+
+        console.log('Resolved sendMsgResult:', result);
+
+        if (result.messageSendResult === 'OK') {
+            Acknowledgement.succeed += 1;
+            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+        } else {
+            Acknowledgement.failed += 1;
+            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+        }
+    } catch (error) {
+        console.error('Error in sendMsgResult promise:', error);
+        Acknowledgement.failed += 1;
+        // Handle errors if the promise fails to resolve
+    }
+    console.log(Acknowledgement);
 }
 async function sendmessage(data) {
     try {
@@ -53,7 +56,6 @@ async function sendmessage(data) {
                         if (value.length === 10) {
                             data.numbers[index] = '91' + value;
                             msgsnedfun(data.numbers[index], data.message);
-
                         } else if (value.length === 12) {
                             msgsnedfun(data.numbers[index], data.message);
                         } else if (value.length === 13 && value.startsWith('+')) {
@@ -69,17 +71,15 @@ async function sendmessage(data) {
                     if (completedCount === data.numbers.length) {
                         console.log("done");
                         data = { numbers: [], message: '' };
-                        // All operations are completed, print "done"
+                        //All msg send
+                        localStorage.setItem('data', '');
                     } else {
                         // If not all operations are completed, continue with the next index
                         executeWithDelay(index + 1);
                     }
-                    // executeWithDelay(index + 1); // Call the function for the next index
-                    localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
                 }, timeout);
             }
         }
-
         // Start execution from the first index (index 0)
         executeWithDelay(0);
         // console.log(localStorage.getItem('some'));
@@ -96,8 +96,16 @@ async function sendmessage(data) {
         console.error('Element not found:', error);
     }
 }
+const storedData = localStorage.getItem('data');
 
-sendmessage(JSON.parse(localStorage.getItem('data')));
-
+if (storedData !== '') {
+    // If 'data' exists in localStorage, parse it and call sendmessage function
+    const parsedData = JSON.parse(storedData);
+    sendmessage(parsedData);
+    console.log(parsedData);
+} else {
+    // If 'data' doesn't exist in localStorage, do nothing or handle as needed
+    console.log("Data not found in localStorage. No action taken.");
+}
 console.log(WPP);
 console.log("End");
