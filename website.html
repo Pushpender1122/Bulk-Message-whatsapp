@@ -66,7 +66,23 @@
         function a() {
             // localStorage.setItem('some', 'somejhnk')
             // handle(['9467592957', '9671099771'], 'Hello');
-            handle();
+            // handle();
+            // Website's JavaScript code
+            // Website's JavaScript code
+
+        }
+        function verifytheExtensioniSiinstallOrNot() {
+            const extensionInstalled = localStorage.getItem('extensionInstalled');
+            if (extensionInstalled) {
+                console.log('Extension is installed');
+                // Perform actions assuming extension is installed
+                // Remove the item from localStorage after checking
+                localStorage.removeItem('extensionInstalled');
+            } else {
+                alert("Extension is not installed")
+                console.log('Extension is not installed');
+                // Perform actions assuming extension is not installed
+            }
         }
     </script>
 </body>

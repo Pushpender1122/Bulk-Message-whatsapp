@@ -37,7 +37,6 @@ chrome.runtime.sendMessage({ getAction: "getData" }, function (response) {
         }
     }
 });
-
 console.log('Content script injected!');
 
 // contentScript.js
