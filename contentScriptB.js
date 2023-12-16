@@ -39,6 +39,7 @@ chrome.runtime.sendMessage({ getAction: "getData" }, function (response) {
 });
 console.log('Content script injected!');
 
+
 // contentScript.js
 
 // function sendMessage() {
@@ -56,6 +57,24 @@ window.addEventListener('load', () => {
     // Inject wppconnect-wa.js after the page has loaded
     injectScript(chrome.runtime.getURL('wppconnect-wa.js'), document.body);
     injectScript(chrome.runtime.getURL('msgsend.js'), document.body);
+    const currentTime = new Date().toLocaleString(); // Get current time
+    sendTimeToBackground(currentTime);
+    chrome.runtime.sendMessage({ action: 'setTheList', data: { time: currentTime, list: JSON.parse(localStorage.getItem('data')) } }, response => {
+        if (response && response.success) {
+            console.log('Data successfully sent to background');
+        } else {
+            console.error('Failed to send data to background');
+        }
+    });
+    function sendTimeToBackground(time) {
+        chrome.runtime.sendMessage({ action: 'setTime', time: time }, function (response) {
+            if (response && response.success) {
+                console.log("Time successfully set in background");
+            } else {
+                console.error("Failed to set time in background");
+            }
+        });
+    }
 });
 
 

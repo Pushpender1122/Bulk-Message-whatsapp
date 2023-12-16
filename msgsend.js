@@ -23,24 +23,24 @@ function waitForElementById(elementId, interval = 1000) {
 }
 //Send message and receiving acknowledgement
 async function msgsnedfun(number, message) {
-    // try {
-    //     const ack = await WPP.chat.sendTextMessage(number, message, { createChat: true });
-    //     const result = await ack.sendMsgResult;
-    //     console.log('Resolved sendMsgResult:', result);
+    try {
+        const ack = await WPP.chat.sendTextMessage(number, message, { createChat: true });
+        const result = await ack.sendMsgResult;
+        console.log('Resolved sendMsgResult:', result);
 
-    //     if (result.messageSendResult === 'OK') {
-    //         Acknowledgement.succeed += 1;
-    //         localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
-    //     } else {
-    //         Acknowledgement.failed += 1;
-    //         localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
-    //     }
-    // } catch (error) {
-    //     console.error('Error in sendMsgResult promise:', error);
-    //     Acknowledgement.failed += 1;
-    //     // Handle errors if the promise fails to resolve
-    // }
-    // console.log(Acknowledgement);
+        if (result.messageSendResult === 'OK') {
+            Acknowledgement.succeed += 1;
+            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+        } else {
+            Acknowledgement.failed += 1;
+            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+        }
+    } catch (error) {
+        console.error('Error in sendMsgResult promise:', error);
+        Acknowledgement.failed += 1;
+        // Handle errors if the promise fails to resolve
+    }
+    console.log(Acknowledgement);
 }
 async function sendmessage(data) {
     try {

@@ -24,17 +24,7 @@ function sendDataToBackground() {
 // Check for changes in localStorage periodically (every 500ms in this example)
 setInterval(sendDataToBackground, 500);
 
-function sendTimeToBackground(time) {
-    chrome.runtime.sendMessage({ action: 'setTime', time: time }, function (response) {
-        if (response && response.success) {
-            console.log("Time successfully set in background");
-        } else {
-            console.error("Failed to set time in background");
-        }
-    });
-}
-const currentTime = new Date().toLocaleString(); // Get current time
-sendTimeToBackground(currentTime);
+
 chrome.runtime.sendMessage({ action: 'setAckObj', ackObject: { succeed: 0, failed: 0 } });
 console.log("run");
 
