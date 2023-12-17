@@ -25,19 +25,19 @@ function sendDataToBackground() {
 setInterval(sendDataToBackground, 500);
 
 
-chrome.runtime.sendMessage({ action: 'setAckObj', ackObject: { succeed: 0, failed: 0 } });
+// chrome.runtime.sendMessage({ action: 'setAckObj', ackObject: { succeed: 0, failed: 0 } });
 console.log("run");
 
-function extensionFunction() {
-    // Your extension function logic here
-    console.log('Extension function executed');
-    // Set a flag in localStorage indicating extension presence
-    localStorage.setItem('extensionInstalled', 'true');
+async function injectScript(file, node) {
+    const script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', file);
+    node.appendChild(script);
 }
-extensionFunction();
+injectScript(chrome.runtime.getURL('initiate.js'), document.body);
 
-chrome.runtime.sendMessage({ action: 'getAckObj' }, function (response) {
-    const ackObjectFromBackground = response.ackObject;
-    console.log(ackObjectFromBackground);
-    // Use ackObjectFromBackground as needed
-});
+// chrome.runtime.sendMessage({ action: 'getAckObj' }, function (response) {
+//     const ackObjectFromBackground = response.ackObject;
+//     console.log(ackObjectFromBackground);
+//     // Use ackObjectFromBackground as needed
+// });

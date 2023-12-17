@@ -1,10 +1,15 @@
-console.log("Start");
+
 function verifytheExtensioniSiinstallOrNot() {
     console.log("Extension is installed");
 }
-const Acknowledgement = { 'succeed': 0, 'failed': 0 };
+const Acknowledgement = {
+    'succeed': 0,
+    'failed': 0,
+    'time': '',
+    'messages': '',
+};
 WPP.webpack.onReady(function () {
-    alert('Ready to use WPPConnect WA-JS');
+    console.log('Ready to use WPPConnect WA-JS');
 });
 function waitForElementById(elementId, interval = 1000) {
     return new Promise((resolve) => {
@@ -21,8 +26,15 @@ function waitForElementById(elementId, interval = 1000) {
         checkExistence();
     });
 }
+var temp = 0;
 //Send message and receiving acknowledgement
 async function msgsnedfun(number, message) {
+    if (temp == 0) {
+        const currentTime = new Date().toLocaleString();
+        Acknowledgement.time = currentTime;
+        Acknowledgement.messages = message;
+        temp++;
+    }
     try {
         const ack = await WPP.chat.sendTextMessage(number, message, { createChat: true });
         const result = await ack.sendMsgResult;
@@ -71,10 +83,15 @@ async function sendmessage(data) {
                     }
                     completedCount++;
                     if (completedCount === data.numbers.length) {
-                        console.log("done");
-                        data = { numbers: [], message: '' };
-                        //All msg send
-                        localStorage.setItem('data', '');
+                        setTimeout(() => {
+                            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+                            console.log("done");
+                            const event = new Event('storageUpdated');
+                            document.dispatchEvent(event);
+                            data = { numbers: [], message: '' };
+                            //All msg send
+                            localStorage.setItem('data', '');
+                        }, 2000);
                     } else {
                         // If not all operations are completed, continue with the next index
                         executeWithDelay(index + 1);
@@ -85,14 +102,6 @@ async function sendmessage(data) {
         // Start execution from the first index (index 0)
         executeWithDelay(0);
         // console.log(localStorage.getItem('some'));
-        setInterval(() => {
-            if (data.numbers.length == Acknowledgement.succeed + Acknowledgement.failed) {
-                localStorage.setItem('GetRecord', true);
-            }
-            else {
-                localStorage.setItem('GetRecord', false);
-            }
-        }, 1000);
 
     } catch (error) {
         console.error('Element not found:', error);
@@ -109,5 +118,4 @@ if (storedData !== '') {
     // If 'data' doesn't exist in localStorage, do nothing or handle as needed
     console.log("Data not found in localStorage. No action taken.");
 }
-console.log(WPP);
-console.log("End");
+

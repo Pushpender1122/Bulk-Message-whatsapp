@@ -6,35 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .container {
-            display: flex;
-            border: 1px solid;
-        }
 
-        .rightside {
-            border: 1px solid;
-        }
-
-        .leftside {
-            display: flex;
-
-        }
-
-        .leftsidediv {
-            padding: 0 20px;
-            border-left: 1px solid;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            /* Align data items at the center */
-        }
-
-        .rightside>p {
-            /* border: 2px solid; */
-            width: 130px;
-            margin-bottom: 10px;
-            /* Adjust margin for spacing between paragraphs */
-        }
     </style>
 </head>
 
@@ -62,17 +34,22 @@
         </div>
 
     </div> -->
-    <div>
-        <div class="time">
-            <h1>Time</h1>
-            <p>20/2/02</p>
-        </div>
-        <div class="item">
-            <h1>Data </h1>
-            <p>{data}</p>
-        </div>
 
-    </div>
+    <table border="2" style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td style="width: 150px; background-color: #f2f2f2;">Hi there, Welcome to the message sender</td>
+            <td style="background-color: #f2f2f2;">Sent</td>
+            <td style="background-color: #f2f2f2;">Failed</td>
+            <td style="background-color: #f2f2f2;">Pending</td>
+        </tr>
+        <tr>
+            <td>Started at 1011.33</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </table>
+
     <script>
         function a() {
             // localStorage.setItem('some', 'somejhnk')
@@ -81,19 +58,6 @@
             // Website's JavaScript code
             // Website's JavaScript code
 
-        }
-        function verifytheExtensioniSiinstallOrNot() {
-            const extensionInstalled = localStorage.getItem('extensionInstalled');
-            if (extensionInstalled) {
-                console.log('Extension is installed');
-                // Perform actions assuming extension is installed
-                // Remove the item from localStorage after checking
-                localStorage.removeItem('extensionInstalled');
-            } else {
-                alert("Extension is not installed")
-                console.log('Extension is not installed');
-                // Perform actions assuming extension is not installed
-            }
         }
     </script>
 </body>
