@@ -88,9 +88,9 @@ async function sendmessage(data) {
                             console.log("done");
                             const event = new Event('storageUpdated');
                             document.dispatchEvent(event);
+                            localStorage.setItem('data', '');
                             data = { numbers: [], message: '' };
                             //All msg send
-                            localStorage.setItem('data', '');
                         }, 2000);
                     } else {
                         // If not all operations are completed, continue with the next index

@@ -5,9 +5,9 @@ chrome.runtime.sendMessage({ getAction: "getData" }, function (response) {
         console.log('bg data');
         console.log(response.backgroundData);
         localStorage.setItem('data', JSON.stringify(response.backgroundData));
-        chrome.runtime.sendMessage({ setAction: "setData", data: '' });
     }
 });
+chrome.runtime.sendMessage({ setAction: "setData", data: '' });
 console.log('Content script injected!');
 
 // contentScript.js

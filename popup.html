@@ -18,6 +18,11 @@
             margin-top: 20px;
             border-collapse: collapse;
             width: 100%;
+            transition: opacity 0.5s ease;
+        }
+
+        .remove-transition {
+            opacity: 0;
         }
 
         .cap {
@@ -38,6 +43,21 @@
 
         .previous-broadcast tr:nth-child(even) {
             background-color: #f9f9f9;
+        }
+
+        .heading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .removePreviousHistory {
+            margin-left: 19px;
+            cursor: pointer;
+        }
+
+        .removePreviousHistory:hover {
+            color: red;
         }
     </style>
 </head>
@@ -61,13 +81,14 @@
         </table>
 
     </div>
-    <h4 class="cap">Previous Broadcast</h4>
+    <div class="heading">
+        <h4 class="cap">Previous Broadcast</h4>
+        <h4 class="removePreviousHistory cap">
+            Remove All History
+        </h4>
+    </div>
     <div id="tableContainer"></div>
-</body>
-
-
-
-<script src="popup.js"></script>
+    <script src="popup.js"></script>
 </body>
 
 </html>

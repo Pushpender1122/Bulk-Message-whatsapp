@@ -19,7 +19,7 @@
       "resources": ["initiate.js"],
       "matches": ["http://*/*","https://*/*"]
     }
-    
+
   ],
   "background": {
     "service_worker": "background.js"
