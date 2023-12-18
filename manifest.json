@@ -15,14 +15,19 @@
     {
       "resources": ["wppconnect-wa.js", "msgsend.js"],
       "matches": ["https://web.whatsapp.com/*"]
+    },{
+      "resources": ["initiate.js"],
+      "matches": ["http://*/*","https://*/*"]
     }
+
   ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["http://127.0.0.1:5500/website.html"],
+      "matches": ["http://*/*","https://*/*"],
+      "exclude_matches": ["*://web.whatsapp.com/*"],
       "js": ["contentScriptA.js"]
     },
     {

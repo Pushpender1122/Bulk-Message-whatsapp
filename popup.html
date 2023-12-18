@@ -8,33 +8,56 @@
     <style>
         .container {
             display: flex;
-            border: 1px solid;
+            /* border: 1px solid; */
+            width: 300px;
+            height: 100px;
         }
 
-        .rightside {
-            padding: 0 5px;
-            border: 0px solid;
+        /* Your existing styles */
+        .previous-broadcast {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+            transition: opacity 0.5s ease;
         }
 
-        .leftside {
-            display: flex;
-
+        .remove-transition {
+            opacity: 0;
         }
 
-        .leftsidediv {
-            padding: 0 20px;
-            border-left: 1px solid;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            /* Align data items at the center */
-        }
-
-        .rightside>p {
-            /* border: 2px solid; */
-            width: 130px;
+        .cap {
+            font-weight: bold;
+            font-size: 1.2em;
             margin-bottom: 10px;
-            /* Adjust margin for spacing between paragraphs */
+        }
+
+        .previous-broadcast th,
+        .previous-broadcast td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .previous-broadcast th {
+            background-color: #f2f2f2;
+        }
+
+        .previous-broadcast tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .heading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .removePreviousHistory {
+            margin-left: 19px;
+            cursor: pointer;
+        }
+
+        .removePreviousHistory:hover {
+            color: red;
         }
     </style>
 </head>
@@ -42,27 +65,33 @@
 <body>
     <!-- <div id="h1"></div> -->
     <div class="container">
-        <div class="rightside">
-            <p>Hi there, Welcome to the message sender</p>
-            <span id="time">Start at 20/21/01</span>
-        </div>
-        <div class="leftside">
-            <div class="leftsidediv">
-                <div>Pending</div>
-                <p>0</p>
-            </div>
-            <div class="leftsidediv">
-                <div>Sent</div>
-                <p id="send">0</p>
-            </div>
-            <div class="leftsidediv">
-                <div>Failed</div>
-                <p id="failed">0</p>
-            </div>
-        </div>
-    </div>
-    <a href="./oldmessage.html">oldmessage</a>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr>
+                <td style="width: 150px; background-color: #f2f2f2;">Hi there, Welcome to the message sender</td>
+                <td style="background-color: #f2f2f2;">Sent</td>
+                <td style="background-color: #f2f2f2;">Failed</td>
+                <td style="background-color: #f2f2f2;">Pending</td>
+            </tr>
+            <tr>
+                <td id="time">Started at 1011.33</td>
+                <td id="send">0</td>
+                <td id="failed">0</td>
+                <td id="pending">0</td>
+            </tr>
+            <tr>
+                <td>Total Recipient</td>
+                <td colspan="3" style="text-align: center;" id="total">0</td>
+            </tr>
+        </table>
 
+    </div>
+    <div class="heading">
+        <h4 class="cap">Previous Broadcast</h4>
+        <h4 class="removePreviousHistory cap">
+            Remove All History
+        </h4>
+    </div>
+    <div id="tableContainer"></div>
     <script src="popup.js"></script>
 </body>
 
