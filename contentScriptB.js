@@ -7,7 +7,7 @@ chrome.runtime.sendMessage({ getAction: "getData" }, function (response) {
         localStorage.setItem('data', JSON.stringify(response.backgroundData));
     }
 });
-chrome.runtime.sendMessage({ setAction: "setData", data: '' });
+
 console.log('Content script injected!');
 
 // contentScript.js
@@ -25,11 +25,6 @@ window.addEventListener('load', () => {
     injectScript(chrome.runtime.getURL('msgsend.js'), document.body);
     injectScript(chrome.runtime.getURL('initiate.js'), document.body);
 });
-
-// chrome.storage.local.remove('allnumber', function () {
-//     console.log('Item removed');
-// });
-
 document.addEventListener('storageUpdated', function (event) {
     // Perform actions upon receiving the custom event
     console.log('localStorage was updated');
@@ -41,5 +36,6 @@ document.addEventListener('storageUpdated', function (event) {
             console.error('Failed to send data to background');
         }
     });
-
 });
+chrome.runtime.sendMessage({ setAction: "setData", data: '' });
+

@@ -9,6 +9,8 @@ chrome.runtime.sendMessage({ action: 'getAllList' }, response => {
         document.getElementById('send').innerHTML = retrievedData[retrievedData.length - 1].list.succeed;
         document.getElementById('failed').innerHTML = retrievedData[retrievedData.length - 1].list.failed;
         document.getElementById('time').innerHTML = retrievedData[retrievedData.length - 1].list.time;
+        document.getElementById('pending').innerHTML = retrievedData[retrievedData.length - 1].list.pending;
+        document.getElementById('total').innerHTML = retrievedData[retrievedData.length - 1].list.total;
 
         const table = document.createElement('table');
         table.classList.add('previous-broadcast');

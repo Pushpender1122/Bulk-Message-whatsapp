@@ -5,6 +5,8 @@ function verifytheExtensioniSiinstallOrNot() {
 const Acknowledgement = {
     'succeed': 0,
     'failed': 0,
+    'pending': 0,
+    'total': 0,
     'time': '',
     'messages': '',
 };
@@ -39,13 +41,17 @@ async function msgsnedfun(number, message) {
         const ack = await WPP.chat.sendTextMessage(number, message, { createChat: true });
         const result = await ack.sendMsgResult;
         console.log('Resolved sendMsgResult:', result);
-
         if (result.messageSendResult === 'OK') {
             Acknowledgement.succeed += 1;
+            Acknowledgement.pending -= 1;
             localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+            const event = new Event('storageUpdated');
+            document.dispatchEvent(event);
         } else {
             Acknowledgement.failed += 1;
             localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+            const event = new Event('storageUpdated');
+            document.dispatchEvent(event);
         }
     } catch (error) {
         console.error('Error in sendMsgResult promise:', error);
@@ -76,9 +82,11 @@ async function sendmessage(data) {
                             data.numbers[index] = value.substring(1); // Remove '+' and keep the rest of the number
                             msgsnedfun(data.numbers[index], data.message);
                         } else {
+                            Acknowledgement.failed++;
                             console.log("invalid number");
                         }
                     } else {
+                        Acknowledgement.failed++;
                         console.log("String found in the number. Invalid number:", value);
                     }
                     completedCount++;
@@ -112,6 +120,8 @@ const storedData = localStorage.getItem('data');
 if (storedData !== '') {
     // If 'data' exists in localStorage, parse it and call sendmessage function
     const parsedData = JSON.parse(storedData);
+    Acknowledgement.total = parsedData.numbers.length;
+    Acknowledgement.pending = parsedData.numbers.length;
     sendmessage(parsedData);
     console.log(parsedData);
 } else {
