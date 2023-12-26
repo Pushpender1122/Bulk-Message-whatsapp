@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Data Extension",
+  "name": "WAMessage API",
   "version": "1.0",
   "permissions": [
     "scripting",
