@@ -1,17 +1,7 @@
-// chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-//     const activeTabId = tabs[0].id;
 chrome.runtime.sendMessage({ action: 'getAllList' }, response => {
     if (response && response.backgroundData) {
         // Received data from the background script
-        const retrievedData = response.backgroundData;
-        console.log(retrievedData);
-        // Access the 'succeed' and 'failed' properties and update innerHTML
-        document.getElementById('send').innerHTML = retrievedData[retrievedData.length - 1].list.succeed;
-        document.getElementById('failed').innerHTML = retrievedData[retrievedData.length - 1].list.failed;
-        document.getElementById('time').innerHTML = retrievedData[retrievedData.length - 1].list.time;
-        document.getElementById('pending').innerHTML = retrievedData[retrievedData.length - 1].list.pending;
-        document.getElementById('total').innerHTML = retrievedData[retrievedData.length - 1].list.total;
-
+        var retrievedData = response.backgroundData;
         const table = document.createElement('table');
         table.classList.add('previous-broadcast');
 
@@ -63,5 +53,19 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Item removed');
         });
     });
+});
+chrome.runtime.sendMessage({ action: 'getTempData' }, function (response) {
+    if (response && response.backgroundData) {
+        // Use the retrieved data (response.backgroundData) here
+        console.log('Retrieved data:', response.backgroundData);
+        var Data = response.backgroundData;
+        document.getElementById('send').innerHTML = Data?.succeed
+        document.getElementById('failed').innerHTML = Data?.failed
+        document.getElementById('time').innerHTML = Data?.time
+        document.getElementById('pending').innerHTML = Data?.pending
+        document.getElementById('total').innerHTML = Data?.total
+    } else {
+        console.error('Failed to retrieve data');
+    }
 });
 
