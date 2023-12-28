@@ -3,10 +3,7 @@
   "name": "WAMessage API",
   "version": "1.0",
   "permissions": [
-    "scripting",
-    "activeTab",
-    "storage",
-    "unlimitedStorage"
+    "storage"
   ],
   "host_permissions": [
       "*://*.whatsapp.com/*"

@@ -46,6 +46,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             return true; // Required for asynchronous response
         }
     });
-
-
+    chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+        if (message.action === "getTempData") {
+            chrome.storage.local.get(['TempData'], function (result) {
+                sendResponse({ backgroundData: result.TempData });
+            });
+            return true; // Required for asynchronous response
+        } else if (message.action === "setTempData") {
+            const dataToStore = message.TempData;
+            chrome.storage.local.set({ 'TempData': dataToStore }, function () {
+                sendResponse({ success: true }); // Sending success response
+            });
+        }
+    });
 });

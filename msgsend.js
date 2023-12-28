@@ -45,12 +45,12 @@ async function msgsnedfun(number, message) {
             Acknowledgement.succeed += 1;
             Acknowledgement.pending -= 1;
             localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
-            const event = new Event('storageUpdated');
+            const event = new Event('StoreData');
             document.dispatchEvent(event);
         } else {
             Acknowledgement.failed += 1;
             localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
-            const event = new Event('storageUpdated');
+            const event = new Event('StoreData');
             document.dispatchEvent(event);
         }
     } catch (error) {
@@ -96,6 +96,8 @@ async function sendmessage(data) {
                             console.log("done");
                             const event = new Event('storageUpdated');
                             document.dispatchEvent(event);
+                            const even = new Event('StoreData');
+                            document.dispatchEvent(even);
                             localStorage.setItem('data', '');
                             data = { numbers: [], message: '' };
                             //All msg send
