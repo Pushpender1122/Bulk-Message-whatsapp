@@ -13,21 +13,6 @@ const Acknowledgement = {
 WPP.webpack.onReady(function () {
     console.log('Ready to use WPPConnect WA-JS');
 });
-function waitForElementById(elementId, interval = 1000) {
-    return new Promise((resolve) => {
-        const checkExistence = () => {
-            const element = document.querySelector(elementId);
-            console.log("Searching (:");
-            if (element) {
-                console.log("Found");
-                resolve(element);
-            } else {
-                setTimeout(checkExistence, interval);
-            }
-        };
-        checkExistence();
-    });
-}
 var temp = 0;
 //Send message and receiving acknowledgement
 async function msgsnedfun(number, message) {
@@ -62,8 +47,6 @@ async function msgsnedfun(number, message) {
 }
 async function sendmessage(data) {
     try {
-        const myElement = await waitForElementById('#app > div > div.two._1jJ70 > div._2Ts6i._3RGKj > header > div._604FD > div > span > div:nth-child(4) > div > span');
-        console.log(myElement);
         let completedCount = 0;
         function executeWithDelay(index) {
             if (index < data.numbers.length) {

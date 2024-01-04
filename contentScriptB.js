@@ -9,9 +9,21 @@ chrome.runtime.sendMessage({ getAction: "getData" }, function (response) {
 });
 
 console.log('Content script injected!');
-
-// contentScript.js
-// Function to inject wppconnect-wa.js
+function waitForElementById(elementId, interval = 1000) {
+    return new Promise((resolve) => {
+        const checkExistence = () => {
+            const element = document.querySelector(elementId);
+            console.log("Searching (:");
+            if (element) {
+                console.log("Found");
+                resolve(element);
+            } else {
+                setTimeout(checkExistence, interval);
+            }
+        };
+        checkExistence();
+    });
+}
 async function injectScript(file, node) {
     const script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
@@ -19,19 +31,22 @@ async function injectScript(file, node) {
     node.appendChild(script);
 }
 // Wait for the page to load completely
-window.addEventListener('load', () => {
-    // Inject wppconnect-wa.js after the page has loaded
-    injectScript(chrome.runtime.getURL('wppconnect-wa.js'), document.body);
-    injectScript(chrome.runtime.getURL('msgsend.js'), document.body);
-    injectScript(chrome.runtime.getURL('initiate.js'), document.body);
-});
+async function CheckWhatsappLoad (){
+    const myElement = await waitForElementById('#app > div > div.two._1jJ70 > div._2Ts6i._3RGKj > header > div._604FD > div > span > div:nth-child(4) > div > span');
+    if(myElement){
+        injectScript(chrome.runtime.getURL('wppconnect-wa.js'), document.body);
+        injectScript(chrome.runtime.getURL('msgsend.js'), document.body);
+        injectScript(chrome.runtime.getURL('initiate.js'), document.body);
+    }
+}
+CheckWhatsappLoad();
 document.addEventListener('StoreData', function (event) {
     console.log('localStorage was updated');
     chrome.runtime.sendMessage({ action: 'setTempData', TempData: JSON.parse(localStorage.getItem('AcknowledgementData')) }, function (response) {
         if (response && response.success) {
             console.log('Temp store');
         } else {
-            console.error('Failed to store temp');
+            console.log('Failed to store temp');
         }
     });
     // Request the stored list from the background script
@@ -42,7 +57,7 @@ document.addEventListener('storageUpdated', () => {
         if (response && response.success) {
             console.log('Data successfully sent to background');
         } else {
-            console.error('Failed to send data to background');
+            console.log('Failed to send data to background');
         }
     });
 });
