@@ -29,14 +29,10 @@ async function msgsnedfun(number, message) {
         if (result.messageSendResult === 'OK') {
             Acknowledgement.succeed += 1;
             Acknowledgement.pending -= 1;
-            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
-            const event = new Event('StoreData');
-            document.dispatchEvent(event);
+            StoredDataInLocal();
         } else {
             Acknowledgement.failed += 1;
-            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
-            const event = new Event('StoreData');
-            document.dispatchEvent(event);
+            StoredDataInLocal();
         }
     } catch (error) {
         console.error('Error in sendMsgResult promise:', error);
@@ -66,10 +62,12 @@ async function sendmessage(data) {
                             msgsnedfun(data.numbers[index], data.message);
                         } else {
                             Acknowledgement.failed++;
+                            StoredDataInLocal();
                             console.log("invalid number");
                         }
                     } else {
                         Acknowledgement.failed++;
+                        StoredDataInLocal();
                         console.log("String found in the number. Invalid number:", value);
                     }
                     completedCount++;
@@ -114,3 +112,8 @@ if (storedData !== '') {
     console.log("Data not found in localStorage. No action taken.");
 }
 
+function StoredDataInLocal() {
+    localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+    const event = new Event('StoreData');
+    document.dispatchEvent(event);
+}

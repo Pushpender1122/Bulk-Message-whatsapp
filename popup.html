@@ -3,96 +3,132 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Number Form</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
         .container {
-            display: flex;
-            /* border: 1px solid; */
-            width: 300px;
-            height: 100px;
-        }
-
-        /* Your existing styles */
-        .previous-broadcast {
-            margin-top: 20px;
-            border-collapse: collapse;
-            width: 100%;
-            transition: opacity 0.5s ease;
-        }
-
-        .remove-transition {
-            opacity: 0;
-        }
-
-        .cap {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
-        .previous-broadcast th,
-        .previous-broadcast td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        .previous-broadcast th {
-            background-color: #f2f2f2;
-        }
-
-        .previous-broadcast tr:nth-child(even) {
+            max-width: 400px;
+            margin: 0 auto;
             background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .heading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
         }
 
-        .removePreviousHistory {
-            margin-left: 19px;
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
         }
 
-        .removePreviousHistory:hover {
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
             color: red;
+            margin-top: 8px;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 8px;
+
+        }
+
+        a {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            border: 1px solid #007bff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            width: fit-content;
+            margin-left: 20px;
+        }
+
+        a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Styling for Open Whatsapp link */
+        a[target="_blank"] {
+            display: block;
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+            border: 1px solid #4CAF50;
+            padding: 8px 16px;
+            border-radius: 5px;
+            width: fit-content;
+        }
+
+        a[target="_blank"]:hover {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .linkcontainer {
+            display: flex;
         }
     </style>
 </head>
 
 <body>
-    <!-- <div id="h1"></div> -->
+    <h2>WaMessage API</h2>
     <div class="container">
-        <table border="1" style="border-collapse: collapse; width: 100%;">
-            <tr>
-                <td style="width: 150px; background-color: #f2f2f2;">Hi there, Welcome to the message sender</td>
-                <td style="background-color: #f2f2f2;">Sent</td>
-                <td style="background-color: #f2f2f2;">Failed</td>
-                <td style="background-color: #f2f2f2;">Pending</td>
-            </tr>
-            <tr>
-                <td id="time">Started at 10:12</td>
-                <td id="send">0</td>
-                <td id="failed">0</td>
-                <td id="pending">0</td>
-            </tr>
-            <tr>
-                <td>Total Recipient</td>
-                <td colspan="3" style="text-align: center;" id="total">0</td>
-            </tr>
-        </table>
-
+        <label for="numbers">Enter Comma separated Numbers:</label>
+        <input type="text" id="numbers" name="numbers" required>
+        <p>OR</p>
+        <label for="csvFileInput">Upload CSV File:</label>
+        <input type="file" accept=".csv" name="csvFileInput" id="csvFileInput">
+        <br><br>
+        <label for="message">Enter Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+        <!-- Added textarea for message input -->
+        <br><br>
+        <input type="submit" value="Submit" id="Submit">
+        <div id="errorMessage" class="error-message" style="display: none;">
+            Please enter numbers or upload a CSV file.
+        </div>
+        <div id="messageError" class="error-message" style="display: none;">
+            Please enter a message
+        </div>
+        <div id="successText" class="success-message" style="display: none;">
+            Please open WhatsApp to automate message-sending.
+        </div>
     </div>
-    <div class="heading">
-        <h4 class="cap">Previous Broadcast</h4>
-        <h4 class="removePreviousHistory cap">
-            Remove All History
-        </h4>
+    <!-- Added a placeholder for your script file -->
+    <div class="linkcontainer">
+        <a href="./result.html">Result</a>
+        <a href="https://web.whatsapp.com/" target="_blank">Open Whatsapp</a>
     </div>
-    <div id="tableContainer"></div>
-    <script src="popup.js"></script>
+    <script src="./popup.js"></script>
 </body>
 
 </html>
