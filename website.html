@@ -3,62 +3,71 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Number Form</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
 
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
-    <Button onclick="a()">Send msg</Button>
-
-    <!-- <div class="container">
-        <div class="rightside">
-            <p>Hi there, Welcome to the message sender</p>
-            <span>Start at 20/21/01</span>
-        </div>
-        <div class="leftside">
-            <div class="leftsidediv">
-                <div>Pending</div>
-                <p>0</p>
-            </div>
-            <div class="leftsidediv">
-                <div>Sent</div>
-                <p id="send">0</p>
-            </div>
-            <div class="leftsidediv">
-                <div>Failed</div>
-                <p id="failed">0</p>
-            </div>
-        </div>
-
-    </div> -->
-
-    <table border="2" style="border-collapse: collapse; width: 100%;">
-        <tr>
-            <td style="width: 150px; background-color: #f2f2f2;">Hi there, Welcome to the message sender</td>
-            <td style="background-color: #f2f2f2;">Sent</td>
-            <td style="background-color: #f2f2f2;">Failed</td>
-            <td style="background-color: #f2f2f2;">Pending</td>
-        </tr>
-        <tr>
-            <td>Started at 1011.33</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-    </table>
-
+    <div class="container">
+        <label for="numbers">Enter Numbers:</label>
+        <input type="text" id="numbers" name="numbers" required
+            oninput="this.value = this.value.replace(/[^0-9,]/g, '')" />
+        <br><br>
+        <label for="message">Enter Message:</label>
+        <input type="text" id="message" name="message" required>
+        <br><br>
+        <input type="submit" value="Submit" id="Submit">
+    </div>
     <script>
-        function a() {
-            // localStorage.setItem('some', 'somejhnk')
-            // handle(['9467592957', '9671099771'], 'Hello');
-            // handle();
-            // Website's JavaScript code
-            // Website's JavaScript code
-
-        }
+        const btn = document.getElementById('Submit');
+        const numbers = document.getElementById('numbers');
+        btn.addEventListener('click', () => {
+            console.log(numbers.value.split(','));
+            console.log(typeof numbers.value);
+            console.log("btn press");
+        })
     </script>
 </body>
 

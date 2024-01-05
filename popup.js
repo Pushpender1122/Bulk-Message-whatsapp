@@ -1,71 +1,84 @@
-chrome.runtime.sendMessage({ action: 'getAllList' }, response => {
-    if (response && response.backgroundData) {
-        // Received data from the background script
-        var retrievedData = response.backgroundData;
-        const table = document.createElement('table');
-        table.classList.add('previous-broadcast');
-
-        // Table header
-        const thead = table.createTHead();
-        const headerRow = thead.insertRow();
-        ['Time', 'Message', 'Status'].forEach(headerText => {
-            const th = document.createElement('th');
-            th.textContent = headerText;
-            headerRow.appendChild(th);
-        });
-
-        // Table body
-        const tbody = table.createTBody();
-        retrievedData.forEach(item => {
-            const row = tbody.insertRow();
-            ['time', 'messages'].forEach(key => {
-                const cell = row.insertCell();
-                cell.textContent = item.list[key];
-                cell.style.border = '1px solid #000';
-            });
-
-            const statusCell = row.insertCell();
-            statusCell.classList.add('status-count');
-            const statusText = `Succeed: ${item.list.succeed}, Failed: ${item.list.failed}`;
-            statusCell.textContent = statusText;
-            statusCell.style.border = '1px solid #000';
-        });
-
-        // Append the table to the container
-        const tableContainer = document.getElementById('tableContainer');
-        tableContainer.appendChild(table);
-    } else {
-        console.error('Failed to retrieve data');
-    }
-});
-
-// });
 document.addEventListener('DOMContentLoaded', function () {
-    var remove = document.getElementsByClassName('removePreviousHistory')[0];
-    remove.addEventListener('click', function () {
+    const btn = document.getElementById('Submit');
+    let inputNumber;
+    let csvFile;
 
-        var elementToRemove = document.getElementsByClassName('previous-broadcast')[0];
-        elementToRemove.classList.add('remove-transition'); // Add a class for transition
-        setTimeout(function () {
-            elementToRemove.remove(); // Remove the element after the transition
-        }, 500);
-        chrome.storage.local.remove('allnumber', function () {
-            console.log('Item removed');
-        });
+    btn.addEventListener('click', () => {
+        SubmitData(inputNumber, csvFile);
     });
-});
-chrome.runtime.sendMessage({ action: 'getTempData' }, function (response) {
-    if (response && response.backgroundData) {
-        // Use the retrieved data (response.backgroundData) here
-        console.log('Retrieved data:', response.backgroundData);
-        var Data = response.backgroundData;
-        document.getElementById('send').innerHTML = Data?.succeed
-        document.getElementById('failed').innerHTML = Data?.failed
-        document.getElementById('time').innerHTML = Data?.time
-        document.getElementById('pending').innerHTML = Data?.pending
-        document.getElementById('total').innerHTML = Data?.total
-    } else {
-        console.error('Failed to retrieve data');
+
+    const numberInput = document.getElementById('numbers');
+    numberInput.addEventListener('input', handleNumberInputChange);
+
+    const fileInput = document.getElementById('csvFileInput');
+    fileInput.addEventListener('change', handleFileInputChange);
+
+    function handleNumberInputChange(event) {
+        const input = event.target.value;
+        inputNumber = input.replace(/[^0-9,]/g, '');
+        if (input !== inputNumber) {
+            event.target.value = inputNumber;
+        }
+    }
+
+    function handleFileInputChange(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                csvFile = event.target.result;
+                console.log(csvFile);
+            };
+            reader.readAsText(file);
+        }
     }
 });
 
+function SubmitData(numbers, csvData) {
+    const messageTag = document.getElementById('message');
+    const errorMessage = document.getElementById('errorMessage');
+    const messageError = document.getElementById('messageError');
+    const fileInput = document.getElementById('csvFileInput');
+    const numberInput = document.getElementById('numbers');
+    const successMessage = document.getElementById('successText');
+    var message = messageTag.value.trim();
+    const numbersEmpty = !numbers || numbers === '';
+    const csvEmpty = !csvData;
+
+    errorMessage.style.display = (numbersEmpty && csvEmpty) ? 'block' : 'none';
+    messageError.style.display = (message === '') ? 'block' : 'none';
+
+    if (message && (numbers || csvData)) {
+        let numbersArray = [];
+        if (csvData) {
+            numbersArray = parseCSV(csvData).map(String);
+            numbersArray = numbersArray.toString().split(',');
+            // console.log(numbersArray);
+        } else {
+            numbersArray = numbers.split(',').map(String);
+            // console.log(numbersArray);
+        }
+
+        const dataObject = {
+            numbers: numbersArray,
+            message: message
+        };
+        sendDataToBackground(dataObject);
+        successMessage.style.display = 'block'
+        messageTag.innerHTML = "";
+        fileInput.innerHTML = "";
+        numberInput.innerHTML = "";
+    }
+}
+
+
+function parseCSV(csvContent) {
+    const lines = csvContent.split(/\r?\n/);
+    const numbers = lines.flatMap(line => line.split('\t')).filter(num => num.trim());
+    return numbers;
+}
+
+function sendDataToBackground(dataToSend) {
+    chrome.runtime.sendMessage({ setAction: "setData", data: dataToSend });
+    // window.location.href = 'data.html';
+}
