@@ -7,8 +7,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return true; // Required for asynchronous response
     } else if (message.setAction === "setData") {
         const dataToStore = message.data;
-        chrome.storage.local.set({ 'storedData': dataToStore });
+        chrome.storage.local.set({ 'storedData': dataToStore }, function () {
+            // Acknowledge the content script that data has been set
+            sendResponse(true);
+        });
+        return true; // Required for asynchronous response
     }
+
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (message.action === "setTheList") {
             // Get the new data from the message

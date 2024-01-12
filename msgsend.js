@@ -80,6 +80,7 @@ async function sendmessage(data) {
                             const even = new Event('StoreData');
                             document.dispatchEvent(even);
                             localStorage.setItem('data', '');
+                            localStorage.removeItem('AcknowledgementData');
                             data = { numbers: [], message: '' };
                             //All msg send
                         }, 2000);
