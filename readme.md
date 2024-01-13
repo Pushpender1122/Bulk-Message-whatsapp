@@ -22,7 +22,7 @@ A Chrome extension designed to streamline message delivery by automating the pro
 
 3. **Sending Messages:**
     - Use the `senddata()` function to set messages and numbers for sending.
-    - Example: `senddata({ numbers: ['12312345', '123123123'], message: "Hello" })`.
+    - Example: `senddata({ numbers: [ { number: '+919834123353', message: 'Hello' }, { number: '0987654112', message: 'Hii' }] })`.
 
 ## Troubleshooting
 
