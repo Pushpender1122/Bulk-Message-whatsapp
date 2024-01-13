@@ -32,6 +32,7 @@ async function msgsnedfun(number, message) {
             StoredDataInLocal();
         } else {
             Acknowledgement.failed += 1;
+            Acknowledgement.pending -= 1;
             StoredDataInLocal();
         }
     } catch (error) {
@@ -41,60 +42,69 @@ async function msgsnedfun(number, message) {
     }
     console.log(Acknowledgement);
 }
+function validateAndModifyNumber(originalNumber) {
+    if (originalNumber) {
+        if (originalNumber.length === 10) {
+            return '91' + originalNumber;
+        } else if (originalNumber.length === 12) {
+            return originalNumber; // No modification needed
+        } else if (originalNumber.length === 13 && originalNumber.startsWith('+')) {
+            return originalNumber.substring(1); // Remove '+' and keep the rest of the number
+        } else {
+            console.log("Invalid number:", originalNumber);
+            Acknowledgement.failed++;
+            Acknowledgement.pending -= 1;
+            StoredDataInLocal();
+            return null; // Indicate invalid number
+        }
+    } else {
+        console.log("Invalid number:", originalNumber);
+        Acknowledgement.failed++;
+        Acknowledgement.pending -= 1;
+        StoredDataInLocal();
+        return null; // Indicate invalid number
+    }
+}
 async function sendmessage(data) {
     try {
+        console.log(data.length)
         let completedCount = 0;
         function executeWithDelay(index) {
-            if (index < data.numbers.length) {
-                const value = data.numbers[index];
+            if (index < data.length) {
+                const { number, message } = data[index];
                 let timeout = Math.floor(Math.random() * (12 - 6 + 1)) + 6; // Generate random timeout for each value
                 timeout *= 1000; // Convert seconds to milliseconds
                 console.log(timeout);
                 setTimeout(() => {
-                    if (/^\d+$/.test(value)) { // Check if the value consists only of digits
-                        if (value.length === 10) {
-                            data.numbers[index] = '91' + value;
-                            msgsnedfun(data.numbers[index], data.message);
-                        } else if (value.length === 12) {
-                            msgsnedfun(data.numbers[index], data.message);
-                        } else if (value.length === 13 && value.startsWith('+')) {
-                            data.numbers[index] = value.substring(1); // Remove '+' and keep the rest of the number
-                            msgsnedfun(data.numbers[index], data.message);
+                    const modifiedNumber = validateAndModifyNumber(number);
+                    if (modifiedNumber !== null) {
+                        completedCount++;
+                        msgsnedfun(modifiedNumber, message);
+                        Acknowledgement.total = data.length;
+                        if (completedCount === data.length) {
+                            setTimeout(() => {
+                                // All messages sent
+                                localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+                                console.log("Message Sending Done");
+                                const event = new Event('storageUpdated');
+                                document.dispatchEvent(event);
+                                const even = new Event('StoreData');
+                                document.dispatchEvent(even);
+                                localStorage.setItem('data', '');
+                                localStorage.removeItem('AcknowledgementData');
+                                data = []; // Clear the array
+                            }, 2000);
                         } else {
-                            Acknowledgement.failed++;
-                            StoredDataInLocal();
-                            console.log("invalid number");
+                            executeWithDelay(index + 1); // Continue with the next index
                         }
                     } else {
-                        Acknowledgement.failed++;
-                        StoredDataInLocal();
-                        console.log("String found in the number. Invalid number:", value);
-                    }
-                    completedCount++;
-                    if (completedCount === data.numbers.length) {
-                        setTimeout(() => {
-                            localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
-                            console.log("done");
-                            const event = new Event('storageUpdated');
-                            document.dispatchEvent(event);
-                            const even = new Event('StoreData');
-                            document.dispatchEvent(even);
-                            localStorage.setItem('data', '');
-                            localStorage.removeItem('AcknowledgementData');
-                            data = { numbers: [], message: '' };
-                            //All msg send
-                        }, 2000);
-                    } else {
-                        // If not all operations are completed, continue with the next index
-                        executeWithDelay(index + 1);
+                        completedCount++;
+                        executeWithDelay(index + 1); // Skip to the next iteration
                     }
                 }, timeout);
             }
         }
-        // Start execution from the first index (index 0)
         executeWithDelay(0);
-        // console.log(localStorage.getItem('some'));
-
     } catch (error) {
         console.error('Element not found:', error);
     }
@@ -106,8 +116,9 @@ if (storedData !== '') {
     const parsedData = JSON.parse(storedData);
     Acknowledgement.total = parsedData.numbers.length;
     Acknowledgement.pending = parsedData.numbers.length;
-    sendmessage(parsedData);
+    sendmessage(parsedData.numbers);
     console.log(parsedData);
+    StoredDataInLocal();
 } else {
     // If 'data' doesn't exist in localStorage, do nothing or handle as needed
     console.log("Data not found in localStorage. No action taken.");
