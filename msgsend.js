@@ -25,7 +25,6 @@ async function msgsnedfun(number, message) {
     try {
         const ack = await WPP.chat.sendTextMessage(number, message, { createChat: true });
         const result = await ack.sendMsgResult;
-        console.log('Resolved sendMsgResult:', result);
         if (result.messageSendResult === 'OK') {
             Acknowledgement.succeed += 1;
             Acknowledgement.pending -= 1;
@@ -38,7 +37,6 @@ async function msgsnedfun(number, message) {
     } catch (error) {
         console.error('Error in sendMsgResult promise:', error);
         Acknowledgement.failed += 1;
-        // Handle errors if the promise fails to resolve
     }
     console.log(Acknowledgement);
 }
@@ -128,4 +126,12 @@ function StoredDataInLocal() {
     localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
     const event = new Event('StoreData');
     document.dispatchEvent(event);
+    UitextChanges();
 }
+function UitextChanges() {
+    const chipContainer = document.createElement('div');
+    chipContainer.className = 'my-extension-chip-container';
+    chipContainer.textContent = `${Acknowledgement.succeed + Acknowledgement.failed}/${Acknowledgement.total}`;
+
+    document.body.appendChild(chipContainer);
+} 

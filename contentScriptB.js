@@ -24,29 +24,6 @@ function waitForElementById(elementId, interval = 1000) {
         checkExistence();
     });
 }
-// async function injectScript(file, node) {
-//     const script = document.createElement('script');
-//     script.setAttribute('type', 'text/javascript');
-//     script.setAttribute('src', file);
-//     node.appendChild(script);
-// }
-// // Wait for the page to load completely
-// async function CheckWhatsappLoad() {
-//     const myElement = await waitForElementById('#app > div > div.two._1jJ70 > div._2Ts6i._3RGKj > header > div._604FD > div > span > div:nth-child(4) > div > span');
-//     if (myElement) {
-//         await injectScript(chrome.runtime.getURL('wppconnect-wa.js'), document.body);
-//         await injectScript(chrome.runtime.getURL('msgsend.js'), document.body);
-//         const intervalId = setInterval(() => {
-//             const Acknowledgement = JSON.parse(localStorage.getItem('AcknowledgementData'));
-//             if (typeof Acknowledgement !== null) {
-//                 // Clear the interval if the logic has run
-//                 clearInterval(intervalId);
-//             }
-//         }, 1000);
-
-//         await injectScript(chrome.runtime.getURL('initiate.js'), document.body);
-//     }
-// }
 async function injectScript(file, node) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -94,7 +71,6 @@ document.addEventListener('StoreData', function (event) {
             console.log('Failed to store temp');
         }
     });
-    // Request the stored list from the background script
 });
 document.addEventListener('storageUpdated', () => {
     console.log("Data stored");
