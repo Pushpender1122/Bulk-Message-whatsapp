@@ -10,19 +10,21 @@ A Chrome extension designed to streamline message delivery by automating the pro
 ## How to Use
 
 1. **Installation:**
-    - Clone this repository or download the ZIP file.
-    - Open Chrome and go to `chrome://extensions/`.
-    - Enable Developer mode.
-    - Click on "Load unpacked" and select the downloaded extension folder.
+
+   - Clone this repository or download the ZIP file.
+   - Open Chrome and go to `chrome://extensions/`.
+   - Enable Developer mode.
+   - Click on "Load unpacked" and select the downloaded extension folder.
 
 2. **Setup:**
-    - Open any website and press F12 to enter inspect mode.
-    - Access the console tab in the Developer Tools.
-    - Verify if the extension is installed by typing `isExInstalled`. If it returns true, the extension is installed.
+
+   - Open any website and press F12 to enter inspect mode.
+   - Access the console tab in the Developer Tools.
+   - Verify if the extension is installed by typing `isExInstalled`. If it returns true, the extension is installed.
 
 3. **Sending Messages:**
-    - Use the `senddata()` function to set messages and numbers for sending.
-    - Example: `senddata({ numbers: ['12312345', '123123123'], message: "Hello" })`.
+   - Use the `senddata()` function to set messages and numbers for sending.
+   - Example: `senddata({ numbers: [ { number: '+919834123353', message: 'Hello' }, { number: '0987654112', message: 'Hii' },] })`.
 
 ## Troubleshooting
 
