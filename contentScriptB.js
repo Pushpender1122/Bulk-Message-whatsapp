@@ -63,24 +63,14 @@ async function CheckWhatsappLoad() {
 
 CheckWhatsappLoad();
 document.addEventListener('StoreData', function (event) {
-    console.log('localStorage was updated');
     chrome.runtime.sendMessage({ action: 'setTempData', TempData: JSON.parse(localStorage.getItem('AcknowledgementData')) }, function (response) {
-        if (response && response.success) {
-            console.log('Temp store');
-        } else {
-            console.log('Failed to store temp');
-        }
     });
 });
 document.addEventListener('storageUpdated', () => {
     console.log("Data stored");
 
     chrome.runtime.sendMessage({ action: 'setTheList', data: { list: JSON.parse(localStorage.getItem('AcknowledgementData')) } }, response => {
-        if (response && response.success) {
-            console.log('Data successfully sent to background');
-        } else {
-            console.log('Failed to send data to background');
-        }
+
     });
 });
 chrome.runtime.sendMessage({ setAction: "setData", data: '' });
