@@ -116,7 +116,13 @@ if (storedData !== '') {
     const parsedData = JSON.parse(storedData);
     Acknowledgement.total = parsedData.numbers.length;
     Acknowledgement.pending = parsedData.numbers.length;
-    sendmessage(parsedData.numbers);
+    if (parsedData.message) {
+        sameMessageForAllNUmber(parsedData);
+        console.log("if")
+    } else {
+        sendmessage(parsedData.numbers);
+        console.log("else")
+    }
     console.log(parsedData);
     StoredDataInLocal();
 } else {
@@ -128,4 +134,50 @@ function StoredDataInLocal() {
     localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
     const event = new Event('StoreData');
     document.dispatchEvent(event);
+}
+function sameMessageForAllNUmber(data) {
+    try {
+        let completedCount = 0;
+        function executeWithDelay(index) {
+            if (index < data.numbers.length) {
+                const value = data.numbers[index];
+                let timeout = Math.floor(Math.random() * (12 - 6 + 1)) + 6; // Generate random timeout for each value
+                timeout *= 1000; // Convert seconds to milliseconds
+                console.log(timeout);
+                setTimeout(() => {
+                    const modifiedNumber = validateAndModifyNumber(value);
+                    if (modifiedNumber !== null) {
+                        completedCount++;
+                        msgsnedfun(modifiedNumber, data.message);
+                        Acknowledgement.total = data.numbers.length;
+                        if (completedCount === data.numbers.length) {
+                            setTimeout(() => {
+                                // All messages sent
+                                localStorage.setItem('AcknowledgementData', JSON.stringify(Acknowledgement));
+                                console.log("Message Sending Done");
+                                const event = new Event('storageUpdated');
+                                document.dispatchEvent(event);
+                                const even = new Event('StoreData');
+                                document.dispatchEvent(even);
+                                localStorage.setItem('data', '');
+                                localStorage.removeItem('AcknowledgementData');
+                                data = []; // Clear the array
+                            }, 2000);
+                        } else {
+                            executeWithDelay(index + 1); // Continue with the next index
+                        }
+                    } else {
+                        completedCount++;
+                        executeWithDelay(index + 1); // Skip to the next iteration
+                    }
+                }, timeout);
+            }
+        }
+        // Start execution from the first index (index 0)
+        executeWithDelay(0);
+        // console.log(localStorage.getItem('some'));
+
+    } catch (error) {
+        console.error('Element not found:', error);
+    }
 }
